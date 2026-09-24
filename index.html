@@ -859,7 +859,7 @@
         ];
 
         // Rastrear contador de dependentes
-        let dependentCount = 2;
+        let dependentCount = 1;
 
         // Renderizar um dependente individual
         function renderDependent(index) {
@@ -952,9 +952,18 @@
             const card = document.getElementById(`dependent-${index}`);
             if (card) {
                 card.remove();
-                // Decrementar o contador ao remover
-                if (index === dependentCount) {
-                    dependentCount--;
+                // Recalcular o índice máximo após remoção
+                const allDependentCards = document.querySelectorAll('[id^="dependent-"]');
+                if (allDependentCards.length === 0) {
+                    dependentCount = 1;
+                } else {
+                    // Encontra o maior índice ainda existente
+                    let maxIndex = 0;
+                    allDependentCards.forEach(card => {
+                        const cardIndex = parseInt(card.id.replace('dependent-', ''));
+                        if (cardIndex > maxIndex) maxIndex = cardIndex;
+                    });
+                    dependentCount = maxIndex;
                 }
             }
         }
