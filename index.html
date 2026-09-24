@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Seleção de Benefícios - Blip</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #0052CC 0%, #00B4D8 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 82, 204, 0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0052CC 0%, #00B4D8 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0052CC;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #00B4D8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 24px;
+            height: 24px;
+            background: #00B4D8;
+            border-radius: 50%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #0052CC;
+            box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
+        }
+
+        .info-box {
+            background: #E3F2FD;
+            border-left: 4px solid #0052CC;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #0052CC 0%, #00B4D8 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            opacity: 0.95;
+        }
+
+        .btn-add-dependent {
+            background: #00B4D8;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .btn-add-dependent:hover {
+            opacity: 0.9;
+        }
+
+        .btn-remove-dependent {
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .btn-remove-dependent:hover {
+            opacity: 0.9;
+        }
+
+        .dependent-card {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .dependent-title {
+            font-weight: 600;
+            color: #0052CC;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"],
+        .checkbox-group input[type="radio"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .footer {
+            padding: 20px 30px;
+            background: #f5f5f5;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .success {
+            display: none;
+            background: #E8F5E9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            color: #2E7D32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">● Blip</div>
+            <h1>Formulário de Seleção de Benefícios</h1>
+            <p>Bem-vindo ao Blip! Configure seus benefícios em poucos minutos</p>
+        </div>
+        
+        <div class="content">
+            <div class="success" id="successMessage">
+                ✓ Formulário enviado com sucesso! Seus dados foram salvos.
+            </div>
+
+            <form id="benefitsForm">
+                <!-- DADOS PESSOAIS -->
+                <div class="section">
+                    <div class="section-title">📋 Dados Pessoais</div>
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CPF *</label>
+                        <input type="text" id="cpf" placeholder="000.000.000-00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Nascimento *</label>
+                        <input type="date" id="birthDate" required>
+                    </div>
+                </div>
+
+                <!-- SAÚDE -->
+                <div class="section">
+                    <div class="section-title">🏥 Plano de Saúde - SulAmérica</div>
+                    <div class="info-box">
+                        <strong>ℹ️ Informação:</strong> Seu plano de saúde é automático conforme sua posição. Não há custo adicional!
+                    </div>
+                    <div class="form-group">
+                        <label>Sua Posição (confirme na Offer) *</label>
+                        <select id="positionSelect" required>
+                            <option value="">Selecione...</option>
+                            <option value="c-level">C-Level</option>
+                            <option value="director">Diretores, VP</option>
+                            <option value="senior">Gerente, Gerente Sênior, Principal, Consultor, Sr Staff</option>
+                            <option value="coordinator">Coordenador, Especialista, Staff</option>
+                            <option value="analyst">Assistente, Analista Júnior, Pleno e Sênior</option>
+                            <option value="intern">Estagiário e Aprendiz</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- VALE REFEIÇÃO -->
+                <div class="section">
+                    <div class="section-title">🍽️ Vale Refeição e Alimentação</div>
+                    <div class="info-box">
+                        <strong>Automático:</strong> R$ 1.144,00/mês (R$ 572,00 Vale Refeição + R$ 572,00 Vale Alimentação)
+                    </div>
+                </div>
+
+                <!-- ODONTO -->
+                <div class="section">
+                    <div class="section-title">🦷 Assistência Odontológica - OdontoPrev</div>
+                    <div class="info-box">
+                        <strong>Todos começam com:</strong> Integral Doc (gratuito)<br>
+                        <strong>Upgrade disponível</strong> com taxas adicionais
+                    </div>
+                    <div class="form-group">
+                        <label>Escolha seu plano odontológico:</label>
+                        <div style="margin-top: 15px;">
+                            <div class="checkbox-group">
+                                <input type="radio" name="odontoPlan" value="Integral Doc" id="odonto1" checked>
+                                <label for="odonto1"><strong>Integral Doc</strong> - R$ 0,00 (titular)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="odontoPlan" value="Integral Plus" id="odonto2">
+                                <label for="odonto2"><strong>Integral Plus</strong> - R$ 14,86 (titular) / R$ 22,76 (dependente)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="odontoPlan" value="Premium Ortodontia" id="odonto3">
+                                <label for="odonto3"><strong>Premium Ortodontia</strong> - R$ 23,88 (titular) / R$ 31,78 (dependente)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="odontoPlan" value="Superior Próteses" id="odonto4">
+                                <label for="odonto4"><strong>Superior Próteses</strong> - R$ 23,88 (titular) / R$ 31,78 (dependente)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEPENDENTES - APENAS 1 INICIAL -->
+                <div class="section">
+                    <div class="section-title">👥 Dependentes</div>
+                    <div class="info-box">
+                        <strong>📋 Regras por Plano:</strong><br>
+                        • <strong>Saúde:</strong> Apenas dependentes legais (cônjuge/companheiro(a), filhos e enteados)<br>
+                        • <strong>Odonto:</strong> Qualquer pessoa (não é necessário ser dependente legal)<br>
+                        • <strong>Dependente de IR:</strong> Conforme sua declaração de imposto de renda
+                    </div>
+
+                    <!-- DEPENDENTE 1 - ÚNICO INICIAL -->
+                    <div class="dependent-card" id="dependent-1">
+                        <div class="dependent-title">Dependente 1</div>
+                        
+                        <div class="form-group">
+                            <label>Nome Completo</label>
+                            <input type="text" name="dependent1Name" placeholder="Nome do dependente">
+                        </div>
+                        <div class="form-group">
+                            <label>CPF</label>
+                            <input type="text" name="dependent1CPF" placeholder="000.000.000-00">
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Nascimento</label>
+                            <input type="date" name="dependent1BirthDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Relação de Dependência</label>
+                            <select name="dependent1Relationship" onchange="toggleUnionDate(1); updateBenefitsAvailability(1)">
+                                <option value="">Selecione...</option>
+                                <option value="spouse">Cônjuge/Companheiro(a)</option>
+                                <option value="child">Filho(a)</option>
+                                <option value="stepchild">Enteado(a)</option>
+                                <option value="parent">Pai/Mãe</option>
+                                <option value="inlaw">Sogro(a)</option>
+                                <option value="other">Outro</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="unionDateRow1" style="display: none;">
+                            <label>Data da União</label>
+                            <input type="date" name="dependent1UnionDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Nome da Mãe</label>
+                            <input type="text" name="dependent1MotherName" placeholder="Nome da mãe do dependente">
+                        </div>
+                        
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                            <label style="font-weight: 600; margin-bottom: 10px; display: block;">Benefícios do Dependente</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="dep1saude" name="dependent1Saude">
+                                <label for="dep1saude">Saúde<span id="saude-label-1" style="font-size: 11px; color: #FF6B6B; margin-left: 5px; display: none;">(apenas legais)</span></label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="dep1odonto" name="dependent1Odonto">
+                                <label for="dep1odonto">Odonto</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="dep1ir" name="dependent1IR">
+                                <label for="dep1ir">Dependente de IR</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CONTAINER PARA ADICIONAR MAIS DEPENDENTES -->
+                    <div id="extraDependents"></div>
+
+                    <!-- BOTÃO ADICIONAR -->
+                    <button type="button" class="btn-add-dependent" id="addDependentBtn">+ Adicionar Dependente</button>
+                </div>
+
+                <!-- SEGURO -->
+                <div class="section">
+                    <div class="section-title">🔒 Seguro de Vida Complementar</div>
+                    <div class="info-box">
+                        <strong>Obrigatório:</strong> 24x salário bruto + R$ 10.000,00 auxílio funeral (Prudential)<br>
+                        <strong>Complementar:</strong> Opcional, com diversas opções de capital
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="wantInsurance">
+                            <label for="wantInsurance">Desejo contratar seguro de vida complementar</label>
+                        </div>
+                    </div>
+                    <div id="insuranceOptions" style="display: none; margin-top: 20px;">
+                        <label>Escolha o capital desejado:</label>
+                        <div style="margin-top: 15px;">
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 100.000" id="ins1">
+                                <label for="ins1">R$ 100.000 - R$ 10,30/mês</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 200.000" id="ins2">
+                                <label for="ins2">R$ 200.000 - R$ 20,60/mês</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 300.000" id="ins3">
+                                <label for="ins3">R$ 300.000 - R$ 30,90/mês</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 400.000" id="ins4">
+                                <label for="ins4">R$ 400.000 - R$ 41,20/mês</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 500.000" id="ins5">
+                                <label for="ins5">R$ 500.000 - R$ 51,50/mês</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 600.000" id="ins6">
+                                <label for="ins6">R$ 600.000 - R$ 61,80/mês</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 700.000" id="ins7">
+                                <label for="ins7">R$ 700.000 - R$ 72,10/mês</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 800.000" id="ins8">
+                                <label for="ins8">R$ 800.000 - R$ 82,40/mês</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">✓ Enviar Formulário</button>
+            </form>
+        </div>
+
+        <div class="footer">
+            <strong>Blip | Payroll Ops</strong> | Dúvidas? Contate a Lia<br>
+            📱 WhatsApp: +55 11 98694-2571
+        </div>
+    </div>
+
+    <script>
+        let dependentCount = 1;
+
+        function toggleUnionDate(index) {
+            const relationshipSelect = document.querySelector(`select[name="dependent${index}Relationship"]`);
+            const unionDateRow = document.getElementById(`unionDateRow${index}`);
+            
+            if (relationshipSelect && unionDateRow) {
+                if (relationshipSelect.value === 'spouse') {
+                    unionDateRow.style.display = 'block';
+                } else {
+                    unionDateRow.style.display = 'none';
+                    const unionDateInput = document.querySelector(`input[name="dependent${index}UnionDate"]`);
+                    if (unionDateInput) unionDateInput.value = '';
+                }
+            }
+            updateBenefitsAvailability(index);
+        }
+
+        function updateBenefitsAvailability(index) {
+            const relationshipSelect = document.querySelector(`select[name="dependent${index}Relationship"]`);
+            const saudeCheckbox = document.querySelector(`input[id="dep${index}saude"]`);
+            const odontoCheckbox = document.querySelector(`input[id="dep${index}odonto"]`);
+            const irCheckbox = document.querySelector(`input[id="dep${index}ir"]`);
+            const saudeLabel = document.querySelector(`span[id="saude-label-${index}"]`);
+
+            if (!relationshipSelect || !saudeCheckbox) return;
+
+            const relationship = relationshipSelect.value;
+            const isDependenteLegal = relationship === 'spouse' || relationship === 'child' || relationship === 'stepchild';
+
+            if (isDependenteLegal) {
+                saudeCheckbox.disabled = false;
+                saudeCheckbox.parentElement.style.opacity = '1';
+                saudeCheckbox.parentElement.style.cursor = 'pointer';
+                odontoCheckbox.disabled = false;
+                odontoCheckbox.parentElement.style.opacity = '1';
+                irCheckbox.disabled = false;
+                irCheckbox.parentElement.style.opacity = '1';
+                if (saudeLabel) saudeLabel.style.display = 'none';
+            } else {
+                saudeCheckbox.disabled = true;
+                saudeCheckbox.checked = false;
+                saudeCheckbox.parentElement.style.opacity = '0.5';
+                irCheckbox.disabled = true;
+                irCheckbox.checked = false;
+                irCheckbox.parentElement.style.opacity = '0.5';
+                if (saudeLabel) saudeLabel.style.display = 'inline';
+            }
+        }
+
+        function addDependent() {
+            dependentCount++;
+            const extraDependents = document.getElementById('extraDependents');
+            
+            const card = document.createElement('div');
+            card.className = 'dependent-card';
+            card.id = `dependent-${dependentCount}`;
+            
+            card.innerHTML = `
+                <div class="dependent-title">
+                    Dependente ${dependentCount}
+                    <button type="button" class="btn-remove-dependent" onclick="removeDependent(${dependentCount})">✕ Remover</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nome Completo</label>
+                    <input type="text" name="dependent${dependentCount}Name" placeholder="Nome do dependente">
+                </div>
+                <div class="form-group">
+                    <label>CPF</label>
+                    <input type="text" name="dependent${dependentCount}CPF" placeholder="000.000.000-00">
+                </div>
+                <div class="form-group">
+                    <label>Data de Nascimento</label>
+                    <input type="date" name="dependent${dependentCount}BirthDate">
+                </div>
+                <div class="form-group">
+                    <label>Relação de Dependência</label>
+                    <select name="dependent${dependentCount}Relationship" onchange="toggleUnionDate(${dependentCount}); updateBenefitsAvailability(${dependentCount})">
+                        <option value="">Selecione...</option>
+                        <option value="spouse">Cônjuge/Companheiro(a)</option>
+                        <option value="child">Filho(a)</option>
+                        <option value="stepchild">Enteado(a)</option>
+                        <option value="parent">Pai/Mãe</option>
+                        <option value="inlaw">Sogro(a)</option>
+                        <option value="other">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group" id="unionDateRow${dependentCount}" style="display: none;">
+                    <label>Data da União</label>
+                    <input type="date" name="dependent${dependentCount}UnionDate">
+                </div>
+                <div class="form-group">
+                    <label>Nome da Mãe</label>
+                    <input type="text" name="dependent${dependentCount}MotherName" placeholder="Nome da mãe do dependente">
+                </div>
+                
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                    <label style="font-weight: 600; margin-bottom: 10px; display: block;">Benefícios do Dependente</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="dep${dependentCount}saude" name="dependent${dependentCount}Saude">
+                        <label for="dep${dependentCount}saude">Saúde<span id="saude-label-${dependentCount}" style="font-size: 11px; color: #FF6B6B; margin-left: 5px; display: none;">(apenas legais)</span></label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="dep${dependentCount}odonto" name="dependent${dependentCount}Odonto">
+                        <label for="dep${dependentCount}odonto">Odonto</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="dep${dependentCount}ir" name="dependent${dependentCount}IR">
+                        <label for="dep${dependentCount}ir">Dependente de IR</label>
+                    </div>
+                </div>
+            `;
+            
+            extraDependents.appendChild(card);
+        }
+
+        function removeDependent(index) {
+            const card = document.getElementById(`dependent-${index}`);
+            if (card) {
+                card.remove();
+            }
+        }
+
+        document.getElementById('wantInsurance').addEventListener('change', function() {
+            document.getElementById('insuranceOptions').style.display = this.checked ? 'block' : 'none';
+        });
+
+        document.getElementById('addDependentBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            addDependent();
+        });
+
+        document.getElementById('benefitsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                nome: document.getElementById('fullName').value,
+                cpf: document.getElementById('cpf').value,
+                dataNascimento: document.getElementById('birthDate').value,
+                posicao: document.getElementById('positionSelect').value,
+                odonto: document.querySelector('input[name="odontoPlan"]:checked')?.value || '',
+                seguro: document.getElementById('wantInsurance').checked ? 'Sim' : 'Não',
+                seguroCapital: document.querySelector('input[name="insuranceCapital"]:checked')?.value || '',
+                dependentes: []
+            };
+
+            for (let i = 1; i <= dependentCount; i++) {
+                const nameInput = document.querySelector(`input[name="dependent${i}Name"]`);
+                if (nameInput && nameInput.value) {
+                    formData.dependentes.push({
+                        nome: document.querySelector(`input[name="dependent${i}Name"]`)?.value || '',
+                        cpf: document.querySelector(`input[name="dependent${i}CPF"]`)?.value || '',
+                        dataNascimento: document.querySelector(`input[name="dependent${i}BirthDate"]`)?.value || '',
+                        relacao: document.querySelector(`select[name="dependent${i}Relationship"]`)?.value || '',
+                        dataUniao: document.querySelector(`input[name="dependent${i}UnionDate"]`)?.value || '',
+                        nomeMae: document.querySelector(`input[name="dependent${i}MotherName"]`)?.value || '',
+                        saude: document.querySelector(`input[id="dep${i}saude"]`)?.checked ? 'Sim' : 'Não',
+                        odonto: document.querySelector(`input[id="dep${i}odonto"]`)?.checked ? 'Sim' : 'Não',
+                        ir: document.querySelector(`input[id="dep${i}ir"]`)?.checked ? 'Sim' : 'Não'
+                    });
+                }
+            }
+
+            localStorage.setItem('formulario_beneficios', JSON.stringify(formData));
+            
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('benefitsForm').reset();
+            dependentCount = 1;
+            document.getElementById('extraDependents').innerHTML = '';
+            
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 5000);
+            
+            console.log('Formulário:', formData);
+        });
+    </script>
+</body>
+</html>
