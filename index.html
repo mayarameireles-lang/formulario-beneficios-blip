@@ -942,7 +942,17 @@
 
         // Adicionar novo dependente
         function addDependent() {
-            dependentCount++;
+            // Encontra o maior índice existente
+            const allDependentCards = document.querySelectorAll('[id^="dependent-"]');
+            let maxIndex = 0;
+            allDependentCards.forEach(card => {
+                const cardIndex = parseInt(card.id.replace('dependent-', ''));
+                if (cardIndex > maxIndex) maxIndex = cardIndex;
+            });
+            
+            // Se não tem nenhum, começa em 1. Senão, incrementa do máximo
+            dependentCount = allDependentCards.length === 0 ? 1 : maxIndex + 1;
+            
             const container = document.getElementById('dependentsContainer');
             container.appendChild(renderDependent(dependentCount));
         }
