@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleção de Benefícios - Blip Brasil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #0052CC 0%, #00B4D8 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 82, 204, 0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0052CC 0%, #00B4D8 100%);
+            padding: 50px 40px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0052CC;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #00B4D8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 24px;
+            height: 24px;
+            background: #00B4D8;
+            border-radius: 50%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #0052CC;
+            box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* INFO BOX */
+        .info-box {
+            background: #E3F2FD;
+            border-left: 4px solid #00B4D8;
+            padding: 16px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #00695C;
+        }
+
+        /* SAÚDE - AUTOMÁTICO */
+        .health-auto {
+            background: #F0F8FF;
+            border: 1px solid #00B4D8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .health-auto h3 {
+            color: #0052CC;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .health-auto p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .health-auto .value {
+            color: #0052CC;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* ODONTO - EXPANDÍVEL */
+        .odonto-plan {
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .odonto-header {
+            padding: 16px;
+            background: #F9F9F9;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+            transition: background 0.3s;
+        }
+
+        .odonto-header:hover {
+            background: #F0F0F0;
+        }
+
+        .odonto-header input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #0052CC;
+            margin-right: 12px;
+        }
+
+        .odonto-title {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .odonto-title span {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .odonto-arrow {
+            color: #0052CC;
+            font-weight: 700;
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+
+        .odonto-plan.active .odonto-arrow {
+            transform: rotate(90deg);
+        }
+
+        .odonto-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
+            background: white;
+        }
+
+        .odonto-plan.active .odonto-content {
+            max-height: 300px;
+        }
+
+        .odonto-details {
+            padding: 20px;
+            border-top: 1px solid #E0E0E0;
+        }
+
+        .odonto-details h4 {
+            color: #0052CC;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .odonto-coverage {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .odonto-pricing {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .price-item {
+            background: #F9F9F9;
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        .price-label {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .price-value {
+            color: #0052CC;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* SEGURO */
+        .insurance-section {
+            margin-top: 20px;
+        }
+
+        .insurance-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .insurance-check input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #0052CC;
+        }
+
+        .insurance-check label {
+            cursor: pointer;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .insurance-table {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .insurance-table.show {
+            display: block;
+        }
+
+        .insurance-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .insurance-table thead {
+            background: #0052CC;
+            color: white;
+        }
+
+        .insurance-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .insurance-table td {
+            padding: 12px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .insurance-table tr:hover {
+            background: #F9F9F9;
+        }
+
+        .insurance-table input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #0052CC;
+        }
+
+        /* DEPENDENTES */
+        .dependents-container {
+            margin-top: 20px;
+        }
+
+        .dependent-card {
+            background: #F9F9F9;
+            padding: 24px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #00B4D8;
+            position: relative;
+        }
+
+        .dependent-card h4 {
+            color: #0052CC;
+            margin-bottom: 20px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-btn {
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #FF5252;
+        }
+
+        .dependent-flags {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #DDD;
+        }
+
+        .flag-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .flag-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #00B4D8;
+        }
+
+        .flag-group label {
+            cursor: pointer;
+            font-weight: 500;
+            color: #333;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* BOTÕES */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0052CC 0%, #00B4D8 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.95;
+            box-shadow: 0 4px 12px rgba(0, 82, 204, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #0052CC;
+            border: 2px solid #0052CC;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: #F0F8FF;
+        }
+
+        .btn-add {
+            background: #00B4D8;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-add:hover {
+            background: #00A0C0;
+        }
+
+        /* MENSAGENS */
+        .message {
+            padding: 16px;
+            border-radius: 6px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .message.success {
+            background: #D4EDDA;
+            color: #155724;
+            display: block;
+        }
+
+        .message.error {
+            background: #F8D7DA;
+            color: #721C24;
+            display: block;
+        }
+
+        /* RESUMO */
+        .summary-section {
+            background: #E3F2FD;
+            border: 2px solid #00B4D8;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .summary-section h3 {
+            color: #0052CC;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 82, 204, 0.1);
+            color: #666;
+            font-size: 14px;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .summary-value {
+            color: #0052CC;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .dependent-flags {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Seleção de Benefícios</h1>
+            <p>Bem-vindo à Blip Brasil! Configure seus benefícios abaixo.</p>
+        </div>
+
+        <div class="content">
+            <form id="benefitsForm">
+
+                <!-- DADOS PESSOAIS -->
+                <div class="section">
+                    <h2 class="section-title">Dados Pessoais</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nome Completo *</label>
+                            <input type="text" name="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CPF *</label>
+                            <input type="text" name="cpf" placeholder="000.000.000-00" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Nascimento *</label>
+                            <input type="date" name="birthDate" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARGO E SAÚDE -->
+                <div class="section">
+                    <h2 class="section-title">Cargo e Plano de Saúde</h2>
+                    
+                    <div class="form-group">
+                        <label>Qual é sua posição? *</label>
+                        <select id="positionSelect" name="position" required>
+                            <option value="">-- Selecione sua posição --</option>
+                            <option value="c-level">C-Level (CEO, CTO, CFO, VP)</option>
+                            <option value="director">Diretores, VP</option>
+                            <option value="manager">Gerente, Gerente Sênior, Principal, Consultor, Sr Staff</option>
+                            <option value="coordinator">Coordenador, Especialista, Staff</option>
+                            <option value="assistant">Assistente, Analista Júnior, Pleno e Sênior</option>
+                            <option value="intern">Estagiário e Aprendiz</option>
+                        </select>
+                    </div>
+
+                    <div class="health-auto">
+                        <h3>📋 Seu Plano de Saúde (SulAmérica)</h3>
+                        <p>Plano: <span class="value" id="healthPlan">Selecione sua posição</span></p>
+                        <p>Reembolso: <span class="value" id="healthValue">-</span></p>
+                    </div>
+                </div>
+
+                <!-- VALE REFEIÇÃO -->
+                <div class="section">
+                    <h2 class="section-title">Vale Refeição e Alimentação</h2>
+                    
+                    <div class="health-auto">
+                        <h3>🍽️ Vale Refeição (iFood)</h3>
+                        <p>R$ 572,00/mês (Vale Refeição) + R$ 572,00/mês (Vale Alimentação)</p>
+                        <p>Total: <span class="value">R$ 1.144,00/mês</span></p>
+                    </div>
+                </div>
+
+                <!-- ODONTOLÓGICO -->
+                <div class="section">
+                    <h2 class="section-title">Assistência Odontológica</h2>
+                    
+                    <div class="info-box">
+                        Selecione o plano odontológico que melhor se encaixa em suas necessidades. Clique para ver mais detalhes sobre as coberturas.
+                    </div>
+
+                    <!-- Plan 1 -->
+                    <div class="odonto-plan active">
+                        <label class="odonto-header">
+                            <input type="radio" name="odontoPlan" value="Integral Doc" checked>
+                            <div class="odonto-title">
+                                <span>Integral Doc</span>
+                            </div>
+                            <span class="odonto-arrow">▶</span>
+                        </label>
+                        <div class="odonto-content">
+                            <div class="odonto-details">
+                                <h4>Cobertura Incluída:</h4>
+                                <div class="odonto-coverage">
+                                    ✓ Limpeza e profilaxia<br>
+                                    ✓ Radiografia<br>
+                                    ✓ Extração dentária<br>
+                                    ✓ Obturação<br>
+                                    ✓ Diagnóstico e avaliação
+                                </div>
+                                <div class="odonto-pricing">
+                                    <div class="price-item">
+                                        <div class="price-label">Titular</div>
+                                        <div class="price-value">R$ 0,00</div>
+                                    </div>
+                                    <div class="price-item">
+                                        <div class="price-label">Dependente</div>
+                                        <div class="price-value">R$ 0,00</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Plan 2 -->
+                    <div class="odonto-plan">
+                        <label class="odonto-header">
+                            <input type="radio" name="odontoPlan" value="Integral Plus">
+                            <div class="odonto-title">
+                                <span>Integral Plus</span>
+                            </div>
+                            <span class="odonto-arrow">▶</span>
+                        </label>
+                        <div class="odonto-content">
+                            <div class="odonto-details">
+                                <h4>Cobertura Incluída:</h4>
+                                <div class="odonto-coverage">
+                                    ✓ Limpeza e profilaxia<br>
+                                    ✓ Radiografia<br>
+                                    ✓ Extração dentária<br>
+                                    ✓ Obturação<br>
+                                    ✓ Preenchimento/Restauração<br>
+                                    ✓ Endodontia (tratamento de canal)<br>
+                                    ✓ Periodontia (tratamento de gengiva)
+                                </div>
+                                <div class="odonto-pricing">
+                                    <div class="price-item">
+                                        <div class="price-label">Titular</div>
+                                        <div class="price-value">R$ 14,86</div>
+                                    </div>
+                                    <div class="price-item">
+                                        <div class="price-label">Dependente</div>
+                                        <div class="price-value">R$ 22,76</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Plan 3 -->
+                    <div class="odonto-plan">
+                        <label class="odonto-header">
+                            <input type="radio" name="odontoPlan" value="Premium Ortodontia">
+                            <div class="odonto-title">
+                                <span>Premium Ortodontia</span>
+                            </div>
+                            <span class="odonto-arrow">▶</span>
+                        </label>
+                        <div class="odonto-content">
+                            <div class="odonto-details">
+                                <h4>Cobertura Incluída:</h4>
+                                <div class="odonto-coverage">
+                                    ✓ Todas as coberturas anteriores<br>
+                                    ✓ Ortodontia (aparelhos)<br>
+                                    ✓ Planejamento ortodôntico<br>
+                                    ✓ Manutenção de aparelho<br>
+                                    ✓ Cirurgia avançada (oral e maxilo)
+                                </div>
+                                <div class="odonto-pricing">
+                                    <div class="price-item">
+                                        <div class="price-label">Titular</div>
+                                        <div class="price-value">R$ 23,88</div>
+                                    </div>
+                                    <div class="price-item">
+                                        <div class="price-label">Dependente</div>
+                                        <div class="price-value">R$ 31,78</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Plan 4 -->
+                    <div class="odonto-plan">
+                        <label class="odonto-header">
+                            <input type="radio" name="odontoPlan" value="Superior Próteses">
+                            <div class="odonto-title">
+                                <span>Superior Próteses</span>
+                            </div>
+                            <span class="odonto-arrow">▶</span>
+                        </label>
+                        <div class="odonto-content">
+                            <div class="odonto-details">
+                                <h4>Cobertura Incluída:</h4>
+                                <div class="odonto-coverage">
+                                    ✓ Todas as coberturas anteriores<br>
+                                    ✓ Próteses (parcial e total)<br>
+                                    ✓ Implantes dentários<br>
+                                    ✓ Cirurgia de implante<br>
+                                    ✓ Periodontia avançada<br>
+                                    ✓ Regeneração óssea
+                                </div>
+                                <div class="odonto-pricing">
+                                    <div class="price-item">
+                                        <div class="price-label">Titular</div>
+                                        <div class="price-value">R$ 23,88</div>
+                                    </div>
+                                    <div class="price-item">
+                                        <div class="price-label">Dependente</div>
+                                        <div class="price-value">R$ 31,78</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEGURO DE VIDA -->
+                <div class="section">
+                    <h2 class="section-title">Seguro de Vida</h2>
+                    
+                    <div class="info-box">
+                        Você possui um seguro de vida compulsório: 24x seu salário + R$ 10.000 auxílio funeral. Abaixo você pode contratar um seguro complementar opcional.
+                    </div>
+
+                    <div class="insurance-section">
+                        <div class="insurance-check">
+                            <input type="checkbox" id="wantInsurance" name="wantInsurance">
+                            <label for="wantInsurance">Desejo contratar Seguro de Vida Complementar</label>
+                        </div>
+
+                        <div id="insuranceTable" class="insurance-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Opção</th>
+                                        <th>Capital Segurado</th>
+                                        <th>Custo Mensal (desconto em folha)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="radio" name="insuranceCapital" value="100000"></td>
+                                        <td>R$ 100.000,00</td>
+                                        <td>R$ 10,30</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" name="insuranceCapital" value="200000"></td>
+                                        <td>R$ 200.000,00</td>
+                                        <td>R$ 20,60</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" name="insuranceCapital" value="300000"></td>
+                                        <td>R$ 300.000,00</td>
+                                        <td>R$ 30,90</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" name="insuranceCapital" value="500000"></td>
+                                        <td>R$ 500.000,00</td>
+                                        <td>R$ 51,50</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" name="insuranceCapital" value="800000"></td>
+                                        <td>R$ 800.000,00</td>
+                                        <td>R$ 82,40</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEPENDENTES -->
+                <div class="section">
+                    <h2 class="section-title">Dependentes</h2>
+                    
+                    <div class="info-box">
+                        Adicione seus dependentes (cônjuge, filhos, etc). Você pode selecionar quais benefícios cada dependente terá.
+                    </div>
+
+                    <div id="dependentsContainer" class="dependents-container"></div>
+
+                    <button type="button" class="btn btn-add" id="addDependentBtn">+ Adicionar Dependente</button>
+                </div>
+
+                <!-- RESUMO -->
+                <div class="summary-section">
+                    <h3>📊 Resumo de Benefícios</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Plano de Saúde:</span>
+                        <span class="summary-value" id="summaryHealth">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Vale Refeição:</span>
+                        <span class="summary-value">R$ 1.144,00/mês</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Assistência Odontológica:</span>
+                        <span class="summary-value" id="summaryOdonto">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Seguro de Vida Complementar:</span>
+                        <span class="summary-value" id="summaryInsurance">Não contratado</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Dependentes:</span>
+                        <span class="summary-value" id="summaryDependents">0</span>
+                    </div>
+                </div>
+
+                <!-- BOTÕES -->
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">✅ Enviar Benefícios</button>
+                </div>
+
+                <div id="message" class="message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DADOS ====================
+        const healthPlans = {
+            'c-level': { name: 'Prestige', value: 'R$ 1.010,00/mês' },
+            'director': { name: 'Executivo R3', value: 'R$ 1.000,00/mês' },
+            'manager': { name: 'Executivo R1', value: 'R$ 600,00/mês' },
+            'coordinator': { name: 'Especial 100 R1.2', value: 'R$ 400,00/mês' },
+            'assistant': { name: 'Especial 100 R1', value: 'R$ 180,00/mês' },
+            'intern': { name: 'Direto Nacional Enf', value: 'R$ 90,00/mês' }
+        };
+
+        let dependentCount = 0;
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            const positionSelect = document.getElementById('positionSelect');
+            const wantInsurance = document.getElementById('wantInsurance');
+            const insuranceTable = document.getElementById('insuranceTable');
+            const addDependentBtn = document.getElementById('addDependentBtn');
+            const form = document.getElementById('benefitsForm');
+
+            // Atualizar saúde
+            positionSelect.addEventListener('change', function() {
+                updateHealthPlan();
+                updateSummary();
+            });
+
+            // Mostrar/esconder seguro
+            wantInsurance.addEventListener('change', function() {
+                insuranceTable.classList.toggle('show');
+                updateSummary();
+            });
+
+            // Seguro change
+            document.querySelectorAll('input[name="insuranceCapital"]').forEach(radio => {
+                radio.addEventListener('change', updateSummary);
+            });
+
+            // Odonto expandable
+            document.querySelectorAll('.odonto-header').forEach(header => {
+                header.addEventListener('click', function(e) {
+                    if (e.target.type !== 'radio') {
+                        const plan = this.closest('.odonto-plan');
+                        
+                        document.querySelectorAll('.odonto-plan').forEach(p => {
+                            if (p !== plan) p.classList.remove('active');
+                        });
+                        
+                        plan.classList.toggle('active');
+                    }
+                });
+
+                header.querySelector('input[type="radio"]').addEventListener('change', function() {
+                    const plan = this.closest('.odonto-plan');
+                    document.querySelectorAll('.odonto-plan').forEach(p => {
+                        p.classList.remove('active');
+                    });
+                    plan.classList.add('active');
+                    updateSummary();
+                });
+            });
+
+            // Adicionar dependente
+            addDependentBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                addDependent();
+            });
+
+            // Submit
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitForm();
+            });
+
+            // CPF cleanup
+            setupCPFCleaner();
+
+            // Initial update
+            updateHealthPlan();
+            updateSummary();
+        });
+
+        // ==================== FUNÇÕES ====================
+        function updateHealthPlan() {
+            const position = document.getElementById('positionSelect').value;
+            const healthPlan = document.getElementById('healthPlan');
+            const healthValue = document.getElementById('healthValue');
+
+            if (position && healthPlans[position]) {
+                healthPlan.textContent = healthPlans[position].name;
+                healthValue.textContent = healthPlans[position].value;
+                document.getElementById('summaryHealth').textContent = healthPlans[position].name;
+            } else {
+                healthPlan.textContent = 'Selecione sua posição';
+                healthValue.textContent = '-';
+                document.getElementById('summaryHealth').textContent = '-';
+            }
+        }
+
+        function addDependent() {
+            dependentCount++;
+            const container = document.getElementById('dependentsContainer');
+            
+            const card = document.createElement('div');
+            card.className = 'dependent-card';
+            card.innerHTML = `
+                <h4>
+                    👥 Dependente ${dependentCount}
+                    <button type="button" class="remove-btn" onclick="removeDependent(this)">✕</button>
+                </h4>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome Completo</label>
+                        <input type="text" name="dependent${dependentCount}Name" data-dependent-id="${dependentCount}">
+                    </div>
+                    <div class="form-group">
+                        <label>CPF</label>
+                        <input type="text" name="dependent${dependentCount}Cpf" placeholder="000.000.000-00" data-dependent-id="${dependentCount}">
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Nascimento</label>
+                        <input type="date" name="dependent${dependentCount}BirthDate" data-dependent-id="${dependentCount}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Relação de Dependência</label>
+                        <select name="dependent${dependentCount}Relationship" data-dependent-id="${dependentCount}">
+                            <option value="">-- Selecione --</option>
+                            <option value="Cônjuge/Companheiro(a)">Cônjuge/Companheiro(a)</option>
+                            <option value="Filho(a)">Filho(a)</option>
+                            <option value="Enteado(a)">Enteado(a)</option>
+                            <option value="Pai/Mãe">Pai/Mãe</option>
+                            <option value="Sogro(a)">Sogro(a)</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nome da Mãe</label>
+                        <input type="text" name="dependent${dependentCount}MotherName" data-dependent-id="${dependentCount}">
+                    </div>
+                    <div class="form-group">
+                        <label>Data de União (se aplicável)</label>
+                        <input type="date" name="dependent${dependentCount}UnionDate" data-dependent-id="${dependentCount}">
+                    </div>
+                </div>
+
+                <div class="dependent-flags">
+                    <div class="flag-group">
+                        <input type="checkbox" id="dep${dependentCount}health" name="dependent${dependentCount}Health" checked>
+                        <label for="dep${dependentCount}health">Incluir em Saúde</label>
+                    </div>
+                    <div class="flag-group">
+                        <input type="checkbox" id="dep${dependentCount}odonto" name="dependent${dependentCount}Odonto" checked>
+                        <label for="dep${dependentCount}odonto">Incluir em Odonto</label>
+                    </div>
+                    <div class="flag-group">
+                        <input type="checkbox" id="dep${dependentCount}ir" name="dependent${dependentCount}IR" checked>
+                        <label for="dep${dependentCount}ir">Dependente para IR</label>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(card);
+            setupCPFCleaner();
+            updateSummary();
+        }
+
+        function removeDependent(btn) {
+            btn.closest('.dependent-card').remove();
+            updateSummary();
+        }
+
+        function updateSummary() {
+            // Odonto
+            const odontoPlan = document.querySelector('input[name="odontoPlan"]:checked')?.value || '-';
+            document.getElementById('summaryOdonto').textContent = odontoPlan;
+
+            // Seguro
+            if (document.getElementById('wantInsurance').checked) {
+                const capital = document.querySelector('input[name="insuranceCapital"]:checked')?.value;
+                const costMap = {
+                    '100000': '10,30',
+                    '200000': '20,60',
+                    '300000': '30,90',
+                    '500000': '51,50',
+                    '800000': '82,40'
+                };
+                if (capital) {
+                    const formatted = 'R$ ' + (parseInt(capital) / 1000).toFixed(0) + 'mil';
+                    document.getElementById('summaryInsurance').textContent = `${formatted} - R$ ${costMap[capital]}/mês`;
+                }
+            } else {
+                document.getElementById('summaryInsurance').textContent = 'Não contratado';
+            }
+
+            // Dependentes
+            const depCount = document.querySelectorAll('.dependent-card').length;
+            document.getElementById('summaryDependents').textContent = depCount;
+        }
+
+        function setupCPFCleaner() {
+            document.querySelectorAll('input[name="cpf"], input[name*="Cpf"]').forEach(input => {
+                input.addEventListener('input', function() {
+                    this.value = this.value.replace(/\D/g, '');
+                    if (this.value.length > 11) {
+                        this.value = this.value.substring(0, 11);
+                    }
+                });
+            });
+        }
+
+        function coletarDados() {
+            const dados = {
+                timestamp: new Date().toLocaleString('pt-BR'),
+                nome: document.querySelector('input[name="fullName"]')?.value || '',
+                cpf: document.querySelector('input[name="cpf"]')?.value || '',
+                dataNascimento: document.querySelector('input[name="birthDate"]')?.value || '',
+                posicao: document.querySelector('select[name="position"]')?.value || '',
+                planoDeSaude: document.getElementById('healthPlan').textContent,
+                valeRefeicao: 'R$ 1.144,00/mês',
+                odontoSelecionado: document.querySelector('input[name="odontoPlan"]:checked')?.value || '',
+                seguroVidaComplementar: document.getElementById('wantInsurance').checked ? 'Sim' : 'Não',
+                capitalSegurado: document.querySelector('input[name="insuranceCapital"]:checked')?.value || '',
+                dependentes: []
+            };
+
+            // Coletar dependentes
+            document.querySelectorAll('.dependent-card').forEach((card, index) => {
+                const dependentNum = index + 1;
+                const dep = {
+                    nome: document.querySelector(`input[name="dependent${dependentNum}Name"]`)?.value || '',
+                    cpf: document.querySelector(`input[name="dependent${dependentNum}Cpf"]`)?.value || '',
+                    dataNascimento: document.querySelector(`input[name="dependent${dependentNum}BirthDate"]`)?.value || '',
+                    relacao: document.querySelector(`select[name="dependent${dependentNum}Relationship"]`)?.value || '',
+                    nomeMae: document.querySelector(`input[name="dependent${dependentNum}MotherName"]`)?.value || '',
+                    dataUniao: document.querySelector(`input[name="dependent${dependentNum}UnionDate"]`)?.value || '',
+                    saude: document.querySelector(`input[name="dependent${dependentNum}Health"]`)?.checked ? 'Sim' : 'Não',
+                    odonto: document.querySelector(`input[name="dependent${dependentNum}Odonto"]`)?.checked ? 'Sim' : 'Não',
+                    ir: document.querySelector(`input[name="dependent${dependentNum}IR"]`)?.checked ? 'Sim' : 'Não'
+                };
+                dados.dependentes.push(dep);
+            });
+
+            return dados;
+        }
+
+        function submitForm() {
+            const submitBtn = document.getElementById('submitBtn');
+            const message = document.getElementById('message');
+            const nome = document.querySelector('input[name="fullName"]')?.value;
+            const cpf = document.querySelector('input[name="cpf"]')?.value;
+
+            if (!nome || !cpf) {
+                message.className = 'message error';
+                message.textContent = '❌ Preencha todos os campos obrigatórios!';
+                return;
+            }
+
+            const dados = coletarDados();
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Salvando...';
+
+            const scriptURL = 'https://script.google.com/a/macros/blip.ai/s/AKfycbwUDZPZSfdkGvpCts2sLnjqpOiNNzDptOyd3Ka-XCHLH_QvovBn_v9ZEQljMqQktH4J/exec';
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(dados),
+                headers: { 'Content-Type': 'application/json' },
+                mode: 'no-cors'
+            })
+            .then(() => {
+                message.className = 'message success';
+                message.textContent = '✅ Benefícios salvos com sucesso!';
+                document.getElementById('benefitsForm').reset();
+                dependentCount = 0;
+                document.getElementById('dependentsContainer').innerHTML = '';
+                updateHealthPlan();
+                updateSummary();
+                submitBtn.disabled = false;
+                submitBtn.textContent = '✅ Enviar Benefícios';
+            })
+            .catch(error => {
+                message.className = 'message error';
+                message.textContent = '❌ Erro ao salvar. Tente novamente.';
+                submitBtn.disabled = false;
+                submitBtn.textContent = '✅ Enviar Benefícios';
+                console.error('Erro:', error);
+            });
+        }
+    </script>
+</body>
+</html>
