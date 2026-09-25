@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Benefícios - Blip</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0052CC 0%, #00B4D8 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,82,204,0.15); }
+        .header { background: linear-gradient(135deg, #0052CC 0%, #00B4D8 100%); padding: 40px 30px; text-align: center; color: white; }
+        .header h1 { font-size: 28px; margin-bottom: 8px; }
+        .content { padding: 40px 30px; }
+        .section { margin-bottom: 50px; }
+        .section-title { font-size: 18px; font-weight: 700; color: #0052CC; margin-bottom: 25px; padding-bottom: 12px; border-bottom: 3px solid #00B4D8; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        input:focus, select:focus { outline: none; border-color: #0052CC; box-shadow: 0 0 0 3px rgba(0,82,204,0.1); }
+        .info-box { background: #E3F2FD; border-left: 4px solid #0052CC; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-size: 14px; }
+        .btn { background: linear-gradient(135deg, #0052CC 0%, #00B4D8 100%); color: white; border: none; padding: 12px 30px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 20px; }
+        .btn:hover { opacity: 0.95; }
+        .btn-add { background: #00B4D8; padding: 8px 15px; margin-top: 15px; }
+        .btn-remove { background: #FF6B6B; padding: 6px 12px; font-size: 14px; margin: 10px 0; }
+        .dependent-card { background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 15px; }
+        .dependent-title { font-weight: 600; color: #0052CC; margin-bottom: 15px; }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .checkbox-group input { width: auto; }
+        .footer { padding: 20px 30px; background: #f5f5f5; text-align: center; font-size: 12px; color: #666; }
+        .success { display: none; background: #E8F5E9; border-left: 4px solid #4CAF50; padding: 15px; border-radius: 6px; margin-bottom: 20px; color: #2E7D32; }
+        .loading { display: none; text-align: center; padding: 20px; color: #0052CC; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="font-size: 24px; font-weight: 700; margin-bottom: 15px;">● Blip</div>
+            <h1>Formulário de Seleção de Benefícios</h1>
+            <p>Configure seus benefícios em poucos minutos</p>
+        </div>
+        
+        <div class="content">
+            <div class="success" id="successMessage">
+                ✓ Formulário enviado com sucesso! Seus benefícios foram registrados.
+            </div>
+
+            <form id="benefitsForm">
+                <!-- DADOS PESSOAIS -->
+                <div class="section">
+                    <div class="section-title">📋 Dados Pessoais</div>
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CPF *</label>
+                        <input type="text" id="cpfTitular" name="cpf" placeholder="000.000.000-00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Nascimento *</label>
+                        <input type="date" id="birthDate" name="birthDate" required>
+                    </div>
+                </div>
+
+                <!-- SAÚDE -->
+                <div class="section">
+                    <div class="section-title">🏥 Plano de Saúde - SulAmérica</div>
+                    <div class="info-box">
+                        <strong>Automático conforme sua posição!</strong>
+                    </div>
+                    <div class="form-group">
+                        <label>Sua Posição *</label>
+                        <select id="positionSelect" name="position" required>
+                            <option value="">Selecione...</option>
+                            <option value="c-level">C-Level</option>
+                            <option value="director">Diretores, VP</option>
+                            <option value="senior">Gerente, Gerente Sênior, Principal</option>
+                            <option value="coordinator">Coordenador, Especialista, Staff</option>
+                            <option value="analyst">Assistente, Analista</option>
+                            <option value="intern">Estagiário e Aprendiz</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ODONTO -->
+                <div class="section">
+                    <div class="section-title">🦷 Assistência Odontológica</div>
+                    <div class="info-box">
+                        Todos começam com Integral Doc (gratuito)
+                    </div>
+                    <div class="form-group">
+                        <label>Escolha seu plano:</label>
+                        <div style="margin-top: 15px;">
+                            <div class="checkbox-group">
+                                <input type="radio" name="odontoPlan" value="Integral Doc" checked>
+                                <label>Integral Doc - R$ 0,00</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="odontoPlan" value="Integral Plus">
+                                <label>Integral Plus - R$ 14,86</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="odontoPlan" value="Premium Ortodontia">
+                                <label>Premium Ortodontia - R$ 23,88</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEPENDENTES -->
+                <div class="section">
+                    <div class="section-title">👥 Dependentes</div>
+                    <div id="dependentsContainer"></div>
+                    <button type="button" class="btn btn-add" id="addDependentBtn">+ Adicionar Dependente</button>
+                </div>
+
+                <!-- SEGURO -->
+                <div class="section">
+                    <div class="section-title">🔒 Seguro de Vida</div>
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="wantInsurance" name="wantInsurance">
+                            <label for="wantInsurance">Desejo seguro de vida complementar</label>
+                        </div>
+                    </div>
+                    <div id="insuranceOptions" style="display: none; margin-top: 20px;">
+                        <label>Capital desejado:</label>
+                        <div style="margin-top: 15px;">
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 100.000">
+                                <label>R$ 100.000</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 200.000">
+                                <label>R$ 200.000</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 300.000">
+                                <label>R$ 300.000</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="radio" name="insuranceCapital" value="R$ 500.000">
+                                <label>R$ 500.000</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">✓ Enviar Formulário</button>
+            </form>
+
+            <div class="loading" id="loading">Enviando dados...</div>
+        </div>
+
+        <div class="footer">
+            <strong>Blip | Payroll Ops</strong> | Dúvidas? Contate a Lia +55 11 98694-2571
+        </div>
+    </div>
+
+    <script>
+        let dependentCount = 0;
+
+        function criarDependente(index) {
+            const card = document.createElement('div');
+            card.className = 'dependent-card';
+            card.id = `dependent-${index}`;
+            card.innerHTML = `
+                <div class="dependent-title">
+                    Dependente ${index}
+                    <button type="button" class="btn-remove" onclick="removerDependente(${index})">✕ Remover</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nome Completo</label>
+                    <input type="text" name="dependent${index}Name" placeholder="Nome">
+                </div>
+                <div class="form-group">
+                    <label>CPF</label>
+                    <input type="text" class="cpf-dependente" name="dependent${index}Cpf" placeholder="000.000.000-00">
+                </div>
+                <div class="form-group">
+                    <label>Data de Nascimento</label>
+                    <input type="date" name="dependent${index}BirthDate">
+                </div>
+                <div class="form-group">
+                    <label>Relação</label>
+                    <select name="dependent${index}Relationship">
+                        <option value="">Selecione...</option>
+                        <option value="spouse">Cônjuge</option>
+                        <option value="child">Filho(a)</option>
+                        <option value="parent">Pai/Mãe</option>
+                        <option value="other">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nome da Mãe</label>
+                    <input type="text" name="dependent${index}MotherName" placeholder="Nome">
+                </div>
+                
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                    <label style="font-weight: 600;">Benefícios</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="dependent${index}Saude">
+                        <label>Saúde</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="dependent${index}Odonto">
+                        <label>Odonto</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="dependent${index}IR">
+                        <label>Dependente de IR</label>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function adicionarDependente() {
+            dependentCount++;
+            const container = document.getElementById('dependentsContainer');
+            const card = criarDependente(dependentCount);
+            container.appendChild(card);
+            
+            // Adiciona limpeza de CPF IMEDIATAMENTE
+            const cpfInput = card.querySelector('input[name="dependent' + dependentCount + 'Cpf"]');
+            if (cpfInput) {
+                cpfInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^\d]/g, '');
+                });
+            }
+        }
+
+        function removerDependente(index) {
+            const card = document.getElementById(`dependent-${index}`);
+            if (card) card.remove();
+        }
+
+        // LIMPEZA DE CPF DO TITULAR
+        const cpfTitular = document.getElementById('cpfTitular');
+        if (cpfTitular) {
+            cpfTitular.addEventListener('input', function() {
+                this.value = this.value.replace(/[^\d]/g, '');
+            });
+        }
+
+        // SEGURO
+        document.getElementById('wantInsurance').addEventListener('change', function() {
+            document.getElementById('insuranceOptions').style.display = this.checked ? 'block' : 'none';
+        });
+
+        // ADICIONAR DEPENDENTE
+        document.getElementById('addDependentBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            adicionarDependente();
+        });
+
+        // ENVIAR FORMULÁRIO
+        document.getElementById('benefitsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const dados = {
+                nome: document.getElementById('fullName').value,
+                cpf: document.getElementById('cpfTitular').value.replace(/[^\d]/g, ''),
+                dataNascimento: document.getElementById('birthDate').value,
+                posicaoSaude: document.getElementById('positionSelect').value,
+                saudeSelecionado: 'Sim',
+                odontoSelecionado: document.querySelector('input[name="odontoPlan"]:checked').value,
+                seguroVida: document.getElementById('wantInsurance').checked ? 'Sim' : 'Não',
+                seguroVidaCapital: document.querySelector('input[name="insuranceCapital"]:checked')?.value || '',
+                dependentes: []
+            };
+
+            // Coleta dependentes
+            for (let i = 1; i <= dependentCount; i++) {
+                const nameInput = document.querySelector(`input[name="dependent${i}Name"]`);
+                if (nameInput && nameInput.value.trim()) {
+                    dados.dependentes.push({
+                        nome: nameInput.value,
+                        cpf: document.querySelector(`input[name="dependent${i}Cpf"]`).value.replace(/[^\d]/g, ''),
+                        dataNascimento: document.querySelector(`input[name="dependent${i}BirthDate"]`).value,
+                        relacao: document.querySelector(`select[name="dependent${i}Relationship"]`).value,
+                        nomeMae: document.querySelector(`input[name="dependent${i}MotherName"]`).value,
+                        saude: document.querySelector(`input[name="dependent${i}Saude"]`).checked ? 'Sim' : 'Não',
+                        odonto: document.querySelector(`input[name="dependent${i}Odonto"]`).checked ? 'Sim' : 'Não',
+                        ir: document.querySelector(`input[name="dependent${i}IR"]`).checked ? 'Sim' : 'Não'
+                    });
+                }
+            }
+
+            console.log('Enviando:', dados);
+            document.getElementById('loading').style.display = 'block';
+
+            fetch('https://script.google.com/a/macros/blip.ai/s/AKfycbwSeAiCSYJZUIboqS1urs71Em2QH1OshvVhpk0PYKlQNtcHNcPr9Rva9Qu_Z3E0Qz4d/exec', {
+                method: 'POST',
+                body: JSON.stringify(dados),
+                mode: 'no-cors'
+            })
+            .then(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('benefitsForm').reset();
+                document.getElementById('dependentsContainer').innerHTML = '';
+                dependentCount = 0;
+                setTimeout(() => document.getElementById('successMessage').style.display = 'none', 5000);
+            })
+            .catch(error => {
+                document.getElementById('loading').style.display = 'none';
+                console.error('Erro:', error);
+                alert('Erro ao enviar. Tente novamente.');
+            });
+        });
+
+        // Inicializar com 0 dependentes
+        console.log('Formulário pronto!');
+    </script>
+</body>
+</html>
